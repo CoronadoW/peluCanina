@@ -1,19 +1,22 @@
-
 package com.yoprogramo.peluqueriacanina.igu;
 
 import com.yoprogramo.peluqueriacanina.logica.Controladora;
+import com.yoprogramo.peluqueriacanina.logica.Duenio;
 import com.yoprogramo.peluqueriacanina.logica.Utility;
-
 
 public class PantallaPrincipal extends javax.swing.JFrame {
 
-  Controladora controlVer ;
-  Utility utility;
-  
-    public PantallaPrincipal(Controladora controlVer, Utility utility) {
+    Controladora control;
+    Utility utility;
+    int dniDuen;
+    Duenio duenio ;
+
+    public PantallaPrincipal(Controladora control, Utility utility, int dniDuen ,Duenio duenio) {
         initComponents();
-        this.controlVer = controlVer;
+        this.control = control;
         this.utility = utility;
+        this.dniDuen = dniDuen;
+        this.duenio = duenio;
     }
 
 //    
@@ -152,19 +155,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerDatosMascotaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDatosMascotaPrincipalActionPerformed
-        VerMascota ver = new VerMascota(controlVer, utility);
+        VerMascota ver = new VerMascota(control, utility);
         ver.setVisible(true);
-        ver.setLocationRelativeTo(null);        
+        ver.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnVerDatosMascotaPrincipalActionPerformed
 
     private void btnVerTodosPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosPrincipalActionPerformed
-        VerTodos verTodos = new VerTodos();
+        VerTodos verTodos = new VerTodos(control, utility);
         verTodos.setVisible(true);
-        verTodos.setLocationRelativeTo(null);        
+        verTodos.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnVerTodosPrincipalActionPerformed
 
     private void btnCrearMascotaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearMascotaPrincipalActionPerformed
-        CrearCliente pantallaCrear =  new CrearCliente ( controlVer, utility);
+        CrearCliente pantallaCrear = new CrearCliente(control, utility);
         pantallaCrear.setVisible(true);
         pantallaCrear.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnCrearMascotaPrincipalActionPerformed
@@ -174,13 +177,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirPrincipalActionPerformed
 
     private void btnVerDatosDuenioPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDatosDuenioPrincipalActionPerformed
-        VerDuenio verDuenio = new VerDuenio(utility, controlVer);
+        VerDuenio verDuenio = new VerDuenio(control, utility, dniDuen, duenio);
         verDuenio.setVisible(true);
         verDuenio.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnVerDatosDuenioPrincipalActionPerformed
 
-   
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearMascotaPrincipal;

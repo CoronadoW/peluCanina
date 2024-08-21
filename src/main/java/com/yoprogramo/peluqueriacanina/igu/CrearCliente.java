@@ -1,19 +1,18 @@
 package com.yoprogramo.peluqueriacanina.igu;
 
 import com.yoprogramo.peluqueriacanina.logica.Controladora;
-import com.yoprogramo.peluqueriacanina.logica.Duenio;
 import com.yoprogramo.peluqueriacanina.logica.Utility;
-import java.util.List;
 
 public class CrearCliente extends javax.swing.JFrame {
-
+    //Instancio a controladora y utility
     Controladora control;
     Utility utility;
-
-    public CrearCliente( Controladora control, Utility utility) {
+    //En el constructor recibo como parametros a un control tipo Controladora  y un utility tipo Utility
+    public CrearCliente(Controladora control, Utility utility) {
         initComponents();
+        //Le asigno a la instancia de esta ventana los parametros pasados a este constructor
         this.control = control;
-        this.utility = utility; 
+        this.utility = utility;
     }
 
     @SuppressWarnings("unchecked")
@@ -258,17 +257,18 @@ public class CrearCliente extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //I get the method limpiarCampos.
     private void btnLimpiarCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCrearActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnLimpiarCrearActionPerformed
-
+    
+    //I save the content of all fields into variables, and I send to control for the creation of a new duenio and its mascota.
     private void btnGuardarCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCrearActionPerformed
-
         String nombMasco = txtNomMascoCrear.getText();
         String raza = txtRazaCrear.getText();
         String color = txtColorCrear.getText();
-        String observa = txtObservacionesCrear.getText();
+        String observa = txtObservacionesCrear.getText(); 
         String alergico = (String) cmbAlergicoCrear.getSelectedItem();
         String ateEspe = (String) cmbAtEspeCrear.getSelectedItem();
 
@@ -276,38 +276,16 @@ public class CrearCliente extends javax.swing.JFrame {
         String numTelDuen = txtTelDuenCrear.getText();
         int dniDuen = Integer.parseInt(txtDniCrear.getText());
         String direDuen = txtDireCrear.getText();
-
-        List<Duenio> listaDuenios = control.treaeListaDuenios();
-        boolean isDniDuenio = false;
-
-        for (Duenio duen : listaDuenios) {
-            if (duen.getDni() == dniDuen) {
-                isDniDuenio = true;
-            }
-        }
-        if (isDniDuenio == true) {
-            utility.mostrarMensaje("Duenio ya existente con ese dni", "Error", "Cargado incorrecto");
-            //showDuenio( dniDuen);
-            VerDuenio verDuenio = new VerDuenio(utility, control);
-            verDuenio.setVisible(true);
-            verDuenio.setLocationRelativeTo(null);
-
-            Duenio duenio = control.traeDuenioDni(dniDuen);
-            verDuenio.mostrarDatosDuenio(duenio);
-            verDuenio.cargarTablaModelo();
-        }
-        if (isDniDuenio == false) {
-            control.guardar(nombMasco, raza, color, observa, alergico, ateEspe, nombreDuen, numTelDuen, dniDuen, direDuen);
-            limpiarCampos();
-            utility.mostrarMensaje("Cliente cargado correctamente", "Info", "Carga de Cliente");
-            this.dispose();
-        }
+        control.guardar(nombMasco, raza, color, observa, alergico, ateEspe, nombreDuen, numTelDuen, dniDuen, direDuen);
+        this.dispose();
     }//GEN-LAST:event_btnGuardarCrearActionPerformed
-
+    
+    //Exit from this window
     private void btnSalirCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirCrearActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirCrearActionPerformed
-
+    
+    //Clean all fields
     private void limpiarCampos() {
         txtNomMascoCrear.setText("");
         txtRazaCrear.setText("");
@@ -317,16 +295,7 @@ public class CrearCliente extends javax.swing.JFrame {
         txtObservacionesCrear.setText("");
         cmbAlergicoCrear.setSelectedIndex(0);
         cmbAtEspeCrear.setSelectedIndex(0);
-    }
-    
-    public void showDuenio(int dniDuen){
-        VerDuenio verDuenio = new VerDuenio(utility, control);
-            verDuenio.setVisible(true);
-            verDuenio.setLocationRelativeTo(null);
-
-            Duenio duenio = control.traeDuenioDni(dniDuen);
-            verDuenio.mostrarDatosDuenio(duenio);
-            verDuenio.cargarTablaModelo();
+        txtObservacionesCrear.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -359,7 +328,5 @@ public class CrearCliente extends javax.swing.JFrame {
     private javax.swing.JTextField txtRazaCrear;
     private javax.swing.JTextField txtTelDuenCrear;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

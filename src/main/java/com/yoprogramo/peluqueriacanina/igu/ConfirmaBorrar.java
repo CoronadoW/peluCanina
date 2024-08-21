@@ -6,19 +6,18 @@ import com.yoprogramo.peluqueriacanina.logica.Utility;
 
 public class ConfirmaBorrar extends javax.swing.JFrame {
 
-    Controladora controlVer;
+    Controladora control;
     Utility utility ;
     VerMascota verMascota;
     
 
     //Habiendo cambiado el tipo de constructor de ConfirmaBorrar al cambiar el metodo "btnBorrarMascota" en VerMascota ,
     // puedo pasarle las variables necesarias para setear los txtfield de esta ventana y poder usarlos para el borrado
-    public ConfirmaBorrar(Controladora controlVer, Utility utility, VerMascota verMascota, String nombreMascota) {
+    public ConfirmaBorrar(Controladora control, Utility utility, VerMascota verMascota, String nombreMascota) {
         initComponents();
-        this.controlVer = controlVer;
+        this.control = control;
         this.utility = utility;
-        this.verMascota = verMascota;
-        
+        this.verMascota = verMascota;        
         txtNombreMascotaABorrar.setText(nombreMascota);
     }
 
@@ -114,9 +113,9 @@ public class ConfirmaBorrar extends javax.swing.JFrame {
 
     private void btnBorrarMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarMascotaActionPerformed
         String nombreMasco = txtNombreMascotaABorrar.getText();
-        Mascota cliente = controlVer.traeMascoNom(nombreMasco);
+        Mascota cliente = control.traeMascoNom(nombreMasco);
         if (cliente != null) {
-            controlVer.borrarMascota(cliente.getNumeroCliente());
+            control.borrarMascota(cliente.getNumeroCliente());
             verMascota.limpiarCamposVerMascota();
             utility.mostrarMensaje("Mascota borrada con exito", "Info", "Borrado de Mascota");
             this.dispose();
@@ -127,7 +126,7 @@ public class ConfirmaBorrar extends javax.swing.JFrame {
         /*Este codigo me daba error al querer ejecutar el borrado mientras el txtField con la info estaba en otra ventana
         Mascota cliente = verMascota.traeClienteVerMascota();
         if (cliente != null) {
-            controlVer.borrarMascota(cliente.getNumeroCliente());
+            control.borrarMascota(cliente.getNumeroCliente());
             verMascota.limpiarCamposVerMascota();
             utility.mostrarMensaje("Cliente borrado con exito", "Info", "Borrado de Cliente");
         } else {

@@ -8,12 +8,13 @@ import com.yoprogramo.peluqueriacanina.logica.Utility;
 public class VerMascota extends javax.swing.JFrame {
 
     //Creo instancias de la logica(Controladora) y la clase Utility
-    Controladora controlVer ;
-    Utility utility ;
+    Controladora control;
+    Utility utility;
 
-    public VerMascota(Controladora controlVer, Utility utility) {
+    //Les asigno a estas instacias las recibidas por parametro en el costructor
+    public VerMascota(Controladora control, Utility utility) {
         initComponents();
-        this.controlVer = controlVer;
+        this.control = control;
         this.utility = utility;
     }
 
@@ -331,6 +332,7 @@ public class VerMascota extends javax.swing.JFrame {
     private void btnBuscarVerMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarVerMascotaActionPerformed
         buscarMascota();
     }//GEN-LAST:event_btnBuscarVerMascotaActionPerformed
+
     //Edito la mascota traida por el nombre
     private void btnEditarMascotaVerMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMascotaVerMascotaActionPerformed
         Mascota cliente = traeClienteVerMascota();
@@ -343,12 +345,12 @@ public class VerMascota extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarMascotaVerMascotaActionPerformed
 
-    //Abro ventana de confirmacion de borrado de mascota
+    //Abro ventana de confirmacion de borrado de mascota pasandole nombreMasco en el costructor
     private void btnBorrarMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarMascotaActionPerformed
-       String nombreMasco = txtIngNomMascota.getText();
-       ConfirmaBorrar confiBorrar = new ConfirmaBorrar(controlVer, utility ,this, nombreMasco);
-       confiBorrar.setVisible(true);
-       confiBorrar.setLocationRelativeTo(null);
+        String nombreMasco = txtIngNomMascota.getText();
+        ConfirmaBorrar confiBorrar = new ConfirmaBorrar(control, utility, this, nombreMasco);
+        confiBorrar.setVisible(true);
+        confiBorrar.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnBorrarMascotaActionPerformed
 
     //Salgo de esta pantalla
@@ -356,7 +358,7 @@ public class VerMascota extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSalirVerMascotaActionPerformed
 
-    //Busco mascota por el nombre ingresado y muestro sus datos en  llamando al metodo mostrarDatosVerMascota
+    //Busco mascota por el nombre ingresado y muestro sus datos en pantalla llamando al metodo mostrarDatosVerMascota
     private void buscarMascota() {
         Mascota cliente = traeClienteVerMascota();
         if (cliente != null) {
@@ -371,6 +373,58 @@ public class VerMascota extends javax.swing.JFrame {
         buscarMascota();
     }//GEN-LAST:event_txtIngNomMascotaActionPerformed
 
+    //Le asigno los datos que ya se encuentran en los textField traidos anteriormente al buscar un cliente/mascota por nombre
+    //y se los asigno a las nuevas instancias de Mascota (cliente) y Duenio(duenio),
+    // para luego pasarselas a la controladora.
+    private void actualizarDatos(Mascota cliente) {
+        cliente.setNombrePerro(txtNomMascoVerMascota.getText());
+        cliente.setColor(txtColorVerMascota.getText());
+        cliente.setRaza(txtRazaVerMascota.getText());
+        cliente.setAlergico(txtAlergicoVerMascota.getText());
+        cliente.setAtencionEspecial(txtAtEspVerMascota.getText());
+        cliente.setObservaciones(txtObserVerMascota.getText());
+
+        Duenio duenio = cliente.getDuenio();
+        duenio.setNombreDuenio(txtNomDuenioVerMascota.getText());
+        duenio.setNumeroTelefono(txtTelDuenVerMascota.getText());
+
+        control.editar(cliente, duenio);
+    }
+
+    //Limpio los campos de VerMascota
+    public void limpiarCamposVerMascota() {
+        txtIngNomMascota.setText("");
+        txtNomMascoVerMascota.setText("");
+        txtIdDuenioVerMascota.setText("");
+        txtRazaVerMascota.setText("");
+        txtColorVerMascota.setText("");
+        txtNomDuenioVerMascota.setText("");
+        txtTelDuenVerMascota.setText("");
+        txtAlergicoVerMascota.setText("");
+        txtAtEspVerMascota.setText("");
+        txtObserVerMascota.setText("");
+    }
+
+    //LLeno los textField de VerMascota con los datos traidos traidos del cliente/mascota
+    private void mostrarDatosVerMascota(Mascota cliente) {
+        txtNomMascoVerMascota.setText(cliente.getNombrePerro());
+        txtIdDuenioVerMascota.setText(String.valueOf(cliente.getDuenio().getIdDuenio()));
+        txtRazaVerMascota.setText(cliente.getRaza());
+        txtColorVerMascota.setText(cliente.getColor());
+        txtNomDuenioVerMascota.setText(cliente.getDuenio().getNombreDuenio());
+        txtTelDuenVerMascota.setText(cliente.getDuenio().getNumeroTelefono());
+        txtAlergicoVerMascota.setText(cliente.alergico);
+        txtAtEspVerMascota.setText(cliente.atencionEspecial);
+        txtObserVerMascota.setText(cliente.getObservaciones());
+    }
+
+    //Tomo el nombre de mascota ingresado en el textFiel, obtengo el cliente/mascota y entrego un cliente
+    public Mascota traeClienteVerMascota() {
+        String nombreMasco = txtIngNomMascota.getText();
+        Mascota cliente = control.traeMascoNom(nombreMasco);
+        return cliente;
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBorrarMascota;
@@ -405,57 +459,5 @@ public class VerMascota extends javax.swing.JFrame {
     private javax.swing.JTextField txtRazaVerMascota;
     private javax.swing.JTextField txtTelDuenVerMascota;
     // End of variables declaration//GEN-END:variables
-
-    //Le asigno los datos que ya se encuentran en los textField traidos anteriormente al buscar un cliente/mascota por nombre
-    //y se los asigno a las nuevas instancias de Mascota (cliente) y Duenio(duenio),
-    // para luego pasarselas a la controladora.
-    private void actualizarDatos(Mascota cliente) {
-        cliente.setNombrePerro(txtNomMascoVerMascota.getText());
-        cliente.setColor(txtColorVerMascota.getText());
-        cliente.setRaza(txtRazaVerMascota.getText());
-        cliente.setAlergico(txtAlergicoVerMascota.getText());
-        cliente.setAtencionEspecial(txtAtEspVerMascota.getText());
-        cliente.setObservaciones(txtObserVerMascota.getText());
-
-        Duenio duenio = cliente.getDuenio();        
-        duenio.setNombreDuenio(txtNomDuenioVerMascota.getText());
-        duenio.setNumeroTelefono(txtTelDuenVerMascota.getText());
-
-        controlVer.editar(cliente, duenio);
-    }
-
-    //Limpio los campos de VerMascota
-    public void limpiarCamposVerMascota() {
-        txtIngNomMascota.setText("");
-        txtNomMascoVerMascota.setText("");
-        txtIdDuenioVerMascota.setText("");
-        txtRazaVerMascota.setText("");
-        txtColorVerMascota.setText("");
-        txtNomDuenioVerMascota.setText("");
-        txtTelDuenVerMascota.setText("");
-        txtAlergicoVerMascota.setText("");
-        txtAtEspVerMascota.setText("");
-        txtObserVerMascota.setText("");
-    }
-
-    //LLeno los textField de VerMascota con los datos traidos traidos del cliente/mascota
-    private void mostrarDatosVerMascota(Mascota cliente) {
-        txtNomMascoVerMascota.setText(cliente.getNombrePerro());
-        txtIdDuenioVerMascota.setText(String.valueOf(cliente.getDuenio().getIdDuenio()));
-        txtRazaVerMascota.setText(cliente.getRaza());
-        txtColorVerMascota.setText(cliente.getColor());
-        txtNomDuenioVerMascota.setText(cliente.getDuenio().getNombreDuenio());
-        txtTelDuenVerMascota.setText(cliente.getDuenio().getNumeroTelefono());
-        txtAlergicoVerMascota.setText(cliente.alergico);
-        txtAtEspVerMascota.setText(cliente.atencionEspecial);
-        txtObserVerMascota.setText(cliente.getObservaciones());
-    } 
-   
-    //Tomo el nombre de mascota ingresado en el textFiel, obtengo el cliente/mascota y entrego el cliente
-    public Mascota traeClienteVerMascota() {
-        String nombreMasco = txtIngNomMascota.getText();
-        Mascota cliente = controlVer.traeMascoNom(nombreMasco);
-        return cliente;
-    } 
 
 }

@@ -10,14 +10,38 @@ import javax.swing.table.DefaultTableModel;
 public class VerDuenio extends javax.swing.JFrame {
 
     Controladora control;
-    Utility utility ;
-    
-    public VerDuenio(Utility utility, Controladora control) {
+    Utility utility;
+    Integer dniDuen; //Cambia a Integer para manejar el valor null
+    Duenio duenio;
+
+    //public VerDuenio(Controladora control, Utility utility, int dniDuen, Duenio duenio) {
+    public VerDuenio(Controladora control, Utility utility, Integer dniDuen, Duenio duenio) {
         initComponents();
-        this.utility = utility;
         this.control = control;
+        this.utility = utility;
+        this.dniDuen = dniDuen;
+        this.duenio = duenio;
+        txtIngDni.setText(String.valueOf(dniDuen));
+        
+        //buscarDuenioByDni(dniDuen);
+        
+        //No me estaria cargando la ventana verDuenio  duenio nullo
+        
+        //Ver estaa parte del codigo
+        /*
+        if (dniDuen != null || dniDuen != 0) {
+            txtIngDni.setText(String.valueOf(dniDuen));
+            //buscarDuenioByDni(dniDuen);
+            cargarDuenioyTabla(duenio);
+        } else {
+            limpiarCamposVerDuenio();
+            cargarTablaVacia();
+        }
+        */
+        
     }
 
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -272,25 +296,30 @@ public class VerDuenio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void btnLimpiarVerDuenioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarVerDuenioActionPerformed
         limpiarCamposVerDuenio();
         cargarTablaVacia();
     }//GEN-LAST:event_btnLimpiarVerDuenioActionPerformed
 
-    public void buscarDuenio() {
-        int dniCliente = Integer.parseInt(txtIngDni.getText());
-        Duenio duenio = control.traeDuenioDni(dniCliente);
+    public void cargarDuenioyTabla(Duenio duenio) {
+        mostrarDatosDuenio(duenio);
+        cargarTablaModelo(duenio);
+    }
+
+    public void buscarDuenioByDni(int dniDuen) {
+        Duenio duenio = control.traeDuenioDni(dniDuen);
         if (duenio != null) {
             mostrarDatosDuenio(duenio);
-            cargarTablaModelo();
+            cargarTablaModelo(duenio);
         } else {
             utility.mostrarMensaje("No existe un dueño con ese Dni", "Error", "Error al buscar dueño");
         }
     }
-    
+
     private void btnBuscarDuenioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDuenioActionPerformed
-        buscarDuenio();
+        int dniDuen = Integer.parseInt(txtIngDni.getText());
+        buscarDuenioByDni(dniDuen);
     }//GEN-LAST:event_btnBuscarDuenioActionPerformed
 
     private void btnSalirVerDuenioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirVerDuenioActionPerformed
@@ -298,7 +327,8 @@ public class VerDuenio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirVerDuenioActionPerformed
 
     private void txtIngDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIngDniActionPerformed
-        buscarDuenio();
+        int dniDuen = Integer.parseInt(txtIngDni.getText());
+        buscarDuenioByDni(dniDuen);
     }//GEN-LAST:event_txtIngDniActionPerformed
 
     private void btnAgregarMascotaVerDuenioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMascotaVerDuenioActionPerformed
@@ -306,13 +336,71 @@ public class VerDuenio extends javax.swing.JFrame {
         agregaCliente.setVisible(true);
         agregaCliente.setLocationRelativeTo(null);
 
-        Duenio duenio = control.traeDuenioDni(Integer.parseInt(txtDniVerDuenio.getText()));
+        int dniDuenio = Integer.parseInt(txtIngDni.getText());
+        Duenio duenio = control.traeDuenioDni(dniDuenio);
         agregaCliente.mostrarDatosDuenio(duenio);
+        this.dispose();
     }//GEN-LAST:event_btnAgregarMascotaVerDuenioActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        cargarTablaVacia();
+        //buscarDuenioByDni(dniDuen); Si dejo este metodo me da error , no existe duenio con ese dni, por que no hay un dni cargado aun, al estarse abriendo la ventana desde el boton verDuenio de la pantalla principal
+        //cargarTablaVacia();
+        if (duenio == null || dniDuen == 0) {
+            txtIngDni.setText("");
+            cargarTablaVacia();
+        } else {
+            cargarDuenioyTabla(duenio);
+        }
     }//GEN-LAST:event_formWindowOpened
+
+    private void limpiarCamposVerDuenio() {
+        txtIngDni.setText("");
+        txtNomDuenioVerDuenio.setText("");
+        txtDniVerDuenio.setText("");
+        txtTelDuenVerDuenio.setText("");
+        txtDireVerDuenio.setText("");
+    }
+
+    public void mostrarDatosDuenio(Duenio duenio) {
+        txtNomDuenioVerDuenio.setText(duenio.getNombreDuenio());
+        txtDniVerDuenio.setText(String.valueOf(duenio.getDni()));
+        txtTelDuenVerDuenio.setText(duenio.getNumeroTelefono());
+        txtDireVerDuenio.setText(duenio.getDireccion());
+    }
+
+    public void cargarTablaVacia() {
+        DefaultTableModel modeloTablaVacia = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int cell, int column) {
+                return false;
+            }
+        };
+        String titulos[] = {"Mascota", "Raza"};
+        modeloTablaVacia.setColumnIdentifiers(titulos);
+        tablaMascotasDuenio.setModel(modeloTablaVacia);
+    }
+
+    public void cargarTablaModelo(Duenio duenio) {
+        DefaultTableModel tablaModelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int cell, int column) {
+                return false;
+            }
+        };
+        String titulos[] = {"Mascota", "Raza"};
+        tablaModelo.setColumnIdentifiers(titulos);
+
+        List<Mascota> listaMascotas = duenio.getListaMascotas();
+        if (listaMascotas != null) {
+            for (Mascota masco : listaMascotas) {
+                Object[] objeto = {
+                    masco.getNombrePerro(), masco.getRaza()
+                };
+                tablaModelo.addRow(objeto);
+            }
+        }
+        tablaMascotasDuenio.setModel(tablaModelo);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -341,59 +429,5 @@ public class VerDuenio extends javax.swing.JFrame {
     private javax.swing.JTextField txtNomDuenioVerDuenio;
     private javax.swing.JTextField txtTelDuenVerDuenio;
     // End of variables declaration//GEN-END:variables
-
-    private void limpiarCamposVerDuenio() {
-        txtIngDni.setText("");
-        txtNomDuenioVerDuenio.setText("");
-        txtDniVerDuenio.setText("");
-        txtTelDuenVerDuenio.setText("");
-        txtDireVerDuenio.setText("");
-    }
-
-    public void mostrarDatosDuenio(Duenio duenio) {
-        txtNomDuenioVerDuenio.setText(duenio.getNombreDuenio());
-        txtDniVerDuenio.setText(String.valueOf(duenio.getDni()));
-        txtTelDuenVerDuenio.setText(duenio.getNumeroTelefono());
-        txtDireVerDuenio.setText(duenio.getDireccion());
-    }
-
-    public void cargarTablaVacia() {
-        DefaultTableModel modeloTablaVacia = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int cell, int column) {
-                return false;
-            }
-        };
-
-        String titulos[] = {
-            "Mascota", "Raza"
-        };
-        modeloTablaVacia.setColumnIdentifiers(titulos);
-        tablaMascotasDuenio.setModel(modeloTablaVacia);
-    }
-
-    public void cargarTablaModelo() {
-        DefaultTableModel tablaModelo = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int cell, int column) {
-                return false;
-            }
-        };
-
-        String titulos[] = {"Mascota", "Raza"};
-        tablaModelo.setColumnIdentifiers(titulos);
-
-        List<Mascota> listaMascotas = control.traeDuenioDni(Integer.parseInt(txtDniVerDuenio.getText())).getListaMascotas();
-
-        if (listaMascotas != null) {
-            for (Mascota masco : listaMascotas) {
-                Object[] objeto = {
-                    masco.getNombrePerro(), masco.getRaza()
-                };
-                tablaModelo.addRow(objeto);
-            }
-        }
-        tablaMascotasDuenio.setModel(tablaModelo);
-    }
 
 }

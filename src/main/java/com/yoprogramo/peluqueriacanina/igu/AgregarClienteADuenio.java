@@ -3,13 +3,12 @@ package com.yoprogramo.peluqueriacanina.igu;
 import com.yoprogramo.peluqueriacanina.logica.Controladora;
 import com.yoprogramo.peluqueriacanina.logica.Duenio;
 import com.yoprogramo.peluqueriacanina.logica.Utility;
-import java.util.List;
 
 public class AgregarClienteADuenio extends javax.swing.JFrame {
-
-    Controladora control ;
-    Utility utility ;
-
+    //Creo instancias de Controladora y Utility
+    Controladora control;
+    Utility utility;
+    //Les asigno a estas instancias las pasadas por parameetro en el constructor
     public AgregarClienteADuenio(Controladora control, Utility utility) {
         initComponents();
         this.control = control;
@@ -259,13 +258,40 @@ public class AgregarClienteADuenio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+    //Recibo por parametro un duenio y muestro sus datos
+    public void mostrarDatosDuenio(Duenio duenio) {
+        txtNomDuenioAgregar.setText(duenio.getNombreDuenio());
+        txtDniAgregar.setText(String.valueOf(duenio.getDni()));
+        txtDireAgregar.setText(duenio.getDireccion());
+        txtTelDuenAgregar.setText(duenio.getNumeroTelefono());
+    }
+    
+    //LLamo al metodo limpiarCampos con el boton Limpiar
     private void btnLimpiarAgregarMascoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarAgregarMascoActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnLimpiarAgregarMascoActionPerformed
-
+    
+    //Limpio todos los campos de esta ventana
+    private void limpiarCampos() {
+        txtNomMascoAgregar.setText("");
+        txtRazaAgregar.setText("");
+        txtColorAgregar.setText("");
+        txtNomDuenioAgregar.setText("");
+        txtDniAgregar.setText("");
+        txtDireAgregar.setText("");
+        txtTelDuenAgregar.setText("");
+        txtObservacionesAgregar.setText("");
+        cmbAlergicoAgregar.setSelectedIndex(0);
+        cmbAtEspeAgregar.setSelectedIndex(0);
+    }
+    
+    //Con el boton Agregar Mascota guardo los datos de los txt y cmb en variables,
+    //se los paso al controlador para añadir una mascota al cliente ya existente con el metodo addCliente de controlador, 
+    //luego cierro esta ventana    
     private void btnAgregarMascotaAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMascotaAgregarActionPerformed
-        //VerDuenio verDuenio = new VerDuenio();
+        //Guardo contenido de los campos de texto y los comboBox en variables, contenido de duenio ya me lo pasa la pantalla de verDuenio
         String nombMasco = txtNomMascoAgregar.getText();
         String raza = txtRazaAgregar.getText();
         String color = txtColorAgregar.getText();
@@ -277,25 +303,12 @@ public class AgregarClienteADuenio extends javax.swing.JFrame {
         String numTelDuen = txtTelDuenAgregar.getText();
         int dniDuen = Integer.parseInt(txtDniAgregar.getText());
         String direDuen = txtDireAgregar.getText();
-
-        List<Duenio> listaDuenios = control.treaeListaDuenios();
-        boolean isDniDuenio = false;
-
-        for (Duenio duen : listaDuenios) {
-            if (duen.getDni() == dniDuen) {
-                 isDniDuenio = true;
-            }
-        }
-        if(isDniDuenio == true){            
-            Duenio duenio = control.traeDuenioDni(dniDuen);  
-            control.agregarCliente(nombMasco, raza, color, observa, alergico, ateEspe, duenio);
-            limpiarCampos();
-            utility.mostrarMensaje("Mascota cargada correctamente", "Info", "Carga de Mascota");
-            this.dispose();
-            
-        }
+        //Le paso las variables a la controladora para que se encarque de la logica y ejecute addCliente  
+        control.addCliente(nombMasco, raza, color, observa, alergico, ateEspe, nombreDuen, numTelDuen, dniDuen, direDuen);
+        this.dispose();
     }//GEN-LAST:event_btnAgregarMascotaAgregarActionPerformed
-
+    
+    //Cierro esta ventana
     private void btnSalirAgregarMascoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirAgregarMascoActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirAgregarMascoActionPerformed
@@ -331,28 +344,5 @@ public class AgregarClienteADuenio extends javax.swing.JFrame {
     private javax.swing.JTextField txtRazaAgregar;
     private javax.swing.JTextField txtTelDuenAgregar;
     // End of variables declaration//GEN-END:variables
-
-    
-    private void limpiarCampos() {
-        txtNomMascoAgregar.setText("");
-        txtRazaAgregar.setText("");
-        txtColorAgregar.setText("");
-        txtNomDuenioAgregar.setText("");
-        txtDniAgregar.setText("");
-        txtDireAgregar.setText("");
-        txtTelDuenAgregar.setText("");
-        txtObservacionesAgregar.setText("");
-        cmbAlergicoAgregar.setSelectedIndex(0);
-        cmbAtEspeAgregar.setSelectedIndex(0);
-    }
-
-    public void mostrarDatosDuenio(Duenio duenio){       
-        txtNomDuenioAgregar.setText(duenio.getNombreDuenio());
-        txtDniAgregar.setText(String.valueOf(duenio.getDni()));
-        txtDireAgregar.setText(duenio.getDireccion());
-        txtTelDuenAgregar.setText(duenio.getNumeroTelefono());        
-    }
-    
-      
 
 }

@@ -7,12 +7,14 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class VerTodos extends javax.swing.JFrame {
+    //Creo instancias de controladora y utility para usar en esta ventana y les asigno la controladora y utility ya creados en otro lugar y recibo como parametro en el constructor
+    Controladora control;
+    Utility utility;
 
-    Utility utility = new Utility();
-    Controladora control = new Controladora();
-
-    public VerTodos() {
+    public VerTodos(Controladora control, Utility utility) {
         initComponents();
+        this.control = control;
+        this.utility = utility;
     }
 
     @SuppressWarnings("unchecked")
@@ -131,11 +133,12 @@ public class VerTodos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //Cuando se abra esta ventana cargo automaticamente la tabla modelo creada para VerTodos llamando al metodo cargarTablaModelo()
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargarTablaModelo();
     }//GEN-LAST:event_formWindowOpened
-
+    //Borro la mascota de la fila seleccionada si la tabla no esta vacia y si selecciono una fila 
     private void btnBorrarVerTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarVerTodosActionPerformed
         //Controlo que la tabla no este vacia
         if (tablaMascotas.getRowCount() > 0) {
@@ -155,22 +158,11 @@ public class VerTodos extends javax.swing.JFrame {
             utility.mostrarMensaje("No hay ninguna mascota en la tabla", "Error", "Error al Eliminar");
         }
     }//GEN-LAST:event_btnBorrarVerTodosActionPerformed
-
+    //Cierro esta ventana
     private void btnSalirVerTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirVerTodosActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirVerTodosActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBorrarVerTodos;
-    private javax.swing.JButton btnSalirVerTodos;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tablaMascotas;
-    // End of variables declaration//GEN-END:variables
-
-    
-
+    //Cargo la tablaModelo creada para esta ventana
     private void cargarTablaModelo() {
         //Defino el modelo de tabla que quiero
         DefaultTableModel tablaModelo = new DefaultTableModel() {
@@ -181,19 +173,19 @@ public class VerTodos extends javax.swing.JFrame {
             }
         };
         //Se establecen los nombres de las columnas
-        String titulos[] = {"Numero", "Mascota", "Raza", "Color", "Alergico", "At. Esp.", "Dueño", "Telefono"};
+        String titulos[] = {"Numero", "Mascota", "Raza", "Color", "Alergico", "At. Esp.", "Dueño", "Telefono", "Direccion"};
         tablaModelo.setColumnIdentifiers(titulos);
 
         //Se carga los datos desde la base de datos
         List<Mascota> listaMascotas = control.traeListaMascotas();
 
         //Se recorre la lista para mostrar "cada" elemento
-        if (listaMascotas != null) {
-            for (Mascota masco : listaMascotas) {
+        if (listaMascotas != null ) {
+            for (Mascota masco : listaMascotas) {                
                 Object[] objeto = {
                     masco.getNumeroCliente(), masco.getNombrePerro(), masco.getRaza(),
-                    masco.getColor(), masco.atencionEspecial, masco.atencionEspecial,
-                    masco.getDuenio().getNombreDuenio(), masco.getDuenio().getNumeroTelefono()
+                    masco.getColor(), masco.alergico, masco.atencionEspecial,
+                    masco.getDuenio().getNombreDuenio(), masco.getDuenio().getNumeroTelefono(), masco.getDuenio().getDireccion()
                 };
                 tablaModelo.addRow(objeto);
             }
@@ -202,6 +194,12 @@ public class VerTodos extends javax.swing.JFrame {
         tablaMascotas.setModel(tablaModelo);
     }
     
-      
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBorrarVerTodos;
+    private javax.swing.JButton btnSalirVerTodos;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tablaMascotas;
+    // End of variables declaration//GEN-END:variables
 
 }
